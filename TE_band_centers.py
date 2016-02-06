@@ -9,5 +9,14 @@ __email__ = 'sbajaj@lbl.gov'
 __date__ = 'Feb 05, 2016'
 
 
+def get_band_center(form):
+    c = Composition(str(form))
+    prod = 1.0
+    for el, amt in c.get_el_amt_dict().iteritems():
+        prod = prod * (Element(el).X ** amt)
+
+    return -prod ** (1 / sum(c.get_el_amt_dict().values()))
+
+
 if __name__ == '__main__':
     mpr = MPRester()
