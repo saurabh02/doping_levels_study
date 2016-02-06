@@ -22,5 +22,9 @@ if __name__ == '__main__':
     mpr = MPRester()
     f = open('Best_n_p_TEs.csv')
     csv_file = csv.reader(f)
+    csv_file.next()   # Skip header
+    for row in csv_file:
+        for compound in row:
+            print Composition(compound)
 
 
