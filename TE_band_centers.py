@@ -1,5 +1,6 @@
 from pymatgen import Composition, Element
 from pymatgen.matproj.rest import MPRester
+import csv
 
 __author__ = 'Saurabh Bajaj'
 # __copyright__ = 'Copyright 2014, The Materials Project'
@@ -14,9 +15,12 @@ def get_band_center(form):
     prod = 1.0
     for el, amt in c.get_el_amt_dict().iteritems():
         prod = prod * (Element(el).X ** amt)
-
     return -prod ** (1 / sum(c.get_el_amt_dict().values()))
 
 
 if __name__ == '__main__':
     mpr = MPRester()
+    f = open('Best_n_p_TEs.csv')
+    csv_file = csv.reader(f)
+
+
