@@ -1,6 +1,7 @@
 from pymatgen import Composition, Element
 from pymatgen.matproj.rest import MPRester
 import csv
+import pandas
 
 __author__ = 'Saurabh Bajaj'
 # __copyright__ = 'Copyright 2014, The Materials Project'
@@ -26,8 +27,12 @@ if __name__ == '__main__':
     f_w = open('Best_n_p_TEs_out.csv', 'wb')
     csv_outfile = csv.writer(f_w)
     csv_outfile.writerow(['formula', 'band gap', '(band gap)/2', 'CBM', 'band center', 'VBM', 'materials_id', 'icsd_id'])
-    for row in csv_file:
-        for compound in row:
+    colnames = ['p-type', 'n-type']
+    input_data = pandas.read_csv('Best_n_p_TEs.csv', names=colnames)
+    input_data_ptype = input_data['p-type'].tolist()[1:]
+    for compound in input_data_ptype:
+    # for row in csv_file:
+    #     for compound in row:
             c = Composition(compound)
             center = get_band_center(c)
             comp_results = mpr.query(c.reduced_formula,
@@ -37,7 +42,7 @@ if __name__ == '__main__':
                 min_e_above_hull = i['e_above_hull']
             except:
                 print 'No compounds exists in MP for ' + c.reduced_formula
-                break
+                continue
             for x in range(1, len(comp_results)):
                 if comp_results[x]['e_above_hull'] < min_e_above_hull:
                     i = comp_results[x]
