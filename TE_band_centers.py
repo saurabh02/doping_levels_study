@@ -29,14 +29,16 @@ if __name__ == '__main__':
     df = pandas.read_csv('Best_n_p_TEs.csv', names=colnames)
     input_data_ptype = df['p-type'].tolist()[1:]
     y = 0
+    compositions = []
     for column in df:
         if column == 'p-type':
             te_type = 'p-type'
         elif column == 'n-type':
             te_type = 'n-type'
         for compound in df[column].tolist()[1:]:
-            if not pandas.isnull(compound):
+            if not pandas.isnull(compound) and Composition(compound) not in compositions:
                 c = Composition(compound)
+                compositions.append(c)
                 center = get_band_center(c)
                 comp_results = mpr.query(c.reduced_formula,
                                          properties=['band_gap', 'material_id', 'icsd_id', 'e_above_hull'])
