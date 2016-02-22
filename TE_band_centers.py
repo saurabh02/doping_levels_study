@@ -17,11 +17,15 @@ def get_band_center(form):
         prod = prod * (Element(el).X ** amt)
         return -prod ** (1 / sum(comp.get_el_amt_dict().values()))
 
+
 if __name__ == '__main__':
     mpr = MPRester()
     f = open('Best_n_p_TEs.csv')
     csv_file = csv.reader(f)
     csv_file.next()  # Skip header
+    f_w = open('Best_n_p_TEs_out.csv', 'wb')
+    csv_outfile = csv.writer(f_w)
+    csv_outfile.writerow(['formula', 'CBM', 'band center', 'VBM', 'materials_id', 'icsd_id'])
     for row in csv_file:
         for compound in row:
             c = Composition(compound)
@@ -39,6 +43,9 @@ if __name__ == '__main__':
                     i = comp_results[x]
                     min_e_above_hull = comp_results[x]['e_above_hull']
             print ','.join([str(x) for x in
-                            c.formula, c.reduced_formula, center, center + i['band_gap'] / 2, center - i[
+                            c.formula, c.reduced_formula, center + i['band_gap'] / 2, center, center, center - i[
                                 'band_gap'] / 2, i['material_id'], i['icsd_id']])
-
+            csv_outfile.writerow([c.reduced_formula, center + i['band_gap'] / 2, center, center - i['band_gap'] / 2,
+                         i['material_id'], i['icsd_id']])
+    f.close()
+    f_w.close()
